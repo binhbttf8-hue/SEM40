@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEM40 Men’s Inspiration Awards</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-top: 30px;
+        }
+
+        .question-container {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .question-container.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .answers button {
+            background: #e3e8ff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .answers button:hover {
+            background: #cdd4ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-buttons button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .nav-buttons button:hover {
+            background: #3730a3;
+        }
+
+        .results-container {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 30px;
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: fadeIn 0.6s ease;
+        }
+
+        .result-item {
+            background: #f5f6ff;
+            padding: 12px;
+            border-radius: 10px;
+            border-left: 5px solid #4f46e5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<h1>SEM40 Men’s Inspiration Awards</h1>
+<div id="quiz"></div>
+<div id="results" class="results-container"></div>
+
+<script>
+    const questions = [
+        'Ai là thuyền trưởng Sem40?',
+        'Ai là nam thần Sem40?',
+        'Ai là người hài hước nhất Sem40?',
+        'Ai là người chăm chỉ nhất SEM40?',
+        'Ai chuyên bán công ty?',
+        'Ai là người đô nhất Sem40?',
+        'Ai là Coder Sem40?',
+        'Ai là người sáng tạo nhất Sem40?',
+        'Ai là Mr.Investor Sem40?',
+        'Ai là nhân tố bí ẩn của Sem40?',
+        'Ai là Superman Sem40?',
+        'Ai là người nhiệt tình nhất Sem40?',
+        'Ai là người lăn xả nhất Sem40?',
+        'Ai là “trùm cuối” chùa Ba Vàng?'
+    ];
+
+
+    const winners = [
+        'Tuấn Hùng', 'Đặng Hồng Đức', 'Xuân Trường', 'Nguyễn Trung Chính',
+        'Minh Tân', 'Dương Minh Đức', 'Thành Duy', 'Hải Ninh',
+        'Hoàng Trọng Định', 'Lê Quang Vũ', 'Thiều Quân',
+        'Vũ Đức Mạnh', 'Nguyễn Quang Trung', 'Trung Hiếu'
+    ];
+
+
+    const realWinners = [
+        'Hoàng Trọng Định', //1
+        'Vũ Đức Mạnh',      //2
+        'Thiều Quân',       //3
+        'Dương Minh Đức',   //4
+        'Đặng Hồng Đức',    //5
+        'Minh Tân',         //6
+        'Thành Duy',        //7
+        'Lê Quang Vũ',      //8
+        'Xuân Trường',      //9
+        'Trung Hiếu',       //10
+        'Tuấn Hùng',        //11
+        'Nguyễn Quang Trung', //12
+        'Nguyễn Trung Chính', //13
+        'Hải Ninh'          //14
+    ];
+
+    const fakeVotes = Array.from({ length: questions.length }, () => Math.floor(Math.random() * 6) + 5);
+
+    let currentQuestion = 0;
+    const totalQuestions = questions.length;
+    const userAnswers = Array(totalQuestions).fill(null);
+
+    const quiz = document.getElementById('quiz');
+    const results = document.getElementById('results');
+
+    function renderQuestion() {
+        quiz.innerHTML = '';
+        const container = document.createElement('div');
+        container.className = 'question-container active';
+
+        const questionText = document.createElement('h2');
+        questionText.textContent = `Câu ${currentQuestion + 1}: ${questions[currentQuestion]}`;
+        container.appendChild(questionText);
+
+        const answersDiv = document.createElement('div');
+        answersDiv.className = 'answers';
+
+        winners.forEach((name, idx) => {
+            const btn = document.createElement('button');
+            btn.textContent = name;
+            btn.onclick = () => {
+                userAnswers[currentQuestion] = idx;
+                document.querySelectorAll('.answers button').forEach(b => b.style.background = '#e3e8ff');
+                btn.style.background = '#a5b4fc';
+            };
+            answersDiv.appendChild(btn);
+        });
+
+        container.appendChild(answersDiv);
+
+        const navDiv = document.createElement('div');
+        navDiv.className = 'nav-buttons';
+
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = 'Câu trước';
+        prevBtn.onclick = () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        };
+        if (currentQuestion === 0) prevBtn.style.visibility = 'hidden';
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = currentQuestion === totalQuestions - 1 ? 'Nộp bài' : 'Câu tiếp';
+        nextBtn.onclick = () => {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        navDiv.appendChild(prevBtn);
+        navDiv.appendChild(nextBtn);
+        container.appendChild(navDiv);
+
+        quiz.appendChild(container);
+    }
+
+    function showResults() {
+        quiz.style.display = 'none';
+        results.style.display = 'flex';
+        results.innerHTML = '<h2>Kết quả bình chọn</h2>';
+
+        questions.forEach((q, i) => {
+            const votes = fakeVotes[i];
+            const item = document.createElement('div');
+            item.className = 'result-item';
+            item.innerHTML = `<strong>Câu ${i + 1}:</strong> ${q}<br>🏆 Người chiến thắng: <b>${realWinners[i]}</b> (${votes}/9 người chọn)`;
+            results.appendChild(item);
+        });
+    }
+
+    renderQuestion();
+</script>
+</body>
+</html>
