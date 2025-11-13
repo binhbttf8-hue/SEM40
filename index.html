@@ -134,28 +134,28 @@
 
 
     const winners = [
-        'Tuấn Hùng', 'Đặng Hồng Đức', 'Xuân Trường', 'Nguyễn Trung Chính',
-        'Minh Tân', 'Dương Minh Đức', 'Thành Duy', 'Hải Ninh',
-        'Hoàng Trọng Định', 'Lê Quang Vũ', 'Thiều Quân',
-        'Vũ Đức Mạnh', 'Nguyễn Quang Trung', 'Trung Hiếu'
+        'Lộc Tuấn Hùng', 'Đặng Hồng Đức', 'Nguyễn Xuân Trường', 'Nguyễn Trung Chính',
+        'Bùi Minh Tân', 'Dương Minh Đức', 'Lê Thành Duy', 'Nguyễn Hải Ninh',
+        'Hoàng Trọng Định', 'Lê Quang Vũ', 'Vũ Thiều Quân',
+        'Vũ Đức Mạnh', 'Nguyễn Quang Trung', 'Nguyễn Trung Hiếu'
     ];
 
 
     const realWinners = [
         'Hoàng Trọng Định', //1
         'Vũ Đức Mạnh',      //2
-        'Thiều Quân',       //3
+        'Vũ Thiều Quân',       //3
         'Dương Minh Đức',   //4
         'Đặng Hồng Đức',    //5
-        'Minh Tân',         //6
-        'Thành Duy',        //7
+        'Bùi Minh Tân',         //6
+        'Lê Thành Duy',        //7
         'Lê Quang Vũ',      //8
-        'Xuân Trường',      //9
-        'Trung Hiếu',       //10
-        'Tuấn Hùng',        //11
+        'Nguyễn Xuân Trường',      //9
+        'Nguyễn Trung Hiếu',       //10
+        'Lộc Tuấn Hùng',        //11
         'Nguyễn Quang Trung', //12
         'Nguyễn Trung Chính', //13
-        'Hải Ninh'          //14
+        'Nguyễn Hải Ninh'          //14
     ];
 
     const fakeVotes = Array.from({ length: questions.length }, () => Math.floor(Math.random() * 5) + 5);
@@ -232,7 +232,7 @@
             const votes = fakeVotes[i];
             const item = document.createElement('div');
             item.className = 'result-item';
-            item.innerHTML = `<strong>Câu ${i + 1}:</strong> ${q}<br>🏆 Người chiến thắng: <b>${realWinners[i]}</b> (${votes}/9 người chọn)`;
+            item.innerHTML = `<strong>Câu ${i + 1}:</strong> ${q}<br>🏆 Người chiến thắng:<b> Mr.${realWinners[i]}</b> (${votes}/9 người chọn)`;
             results.appendChild(item);
         });
     }
@@ -241,3 +241,4 @@
 </script>
 </body>
 </html>
+        }
